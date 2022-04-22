@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { showNotification } from "@mantine/notifications";
 import moment from "moment";
 import axios from "../../services/api";
-import { showNotification } from "@mantine/notifications";
 
 const Scheduling = () => {
   const [form, setForm] = useState({
