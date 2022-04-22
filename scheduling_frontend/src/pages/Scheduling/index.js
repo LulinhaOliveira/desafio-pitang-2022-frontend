@@ -11,7 +11,10 @@ const Schedulings = () => {
     (async () => {
       try {
         const response = await axios.get("/");
-        window.localStorage.setItem("schedulings", JSON.stringify(response));
+        window.localStorage.setItem(
+          "schedulings",
+          JSON.stringify(response.data)
+        );
       } catch (error) {
         if (error.response) {
           showNotification({
@@ -22,7 +25,7 @@ const Schedulings = () => {
         }
       } finally {
         const data = JSON.parse(window.localStorage.getItem("schedulings"));
-        setSchedulings(data.data);
+        setSchedulings(data);
       }
     })();
   }, []);
