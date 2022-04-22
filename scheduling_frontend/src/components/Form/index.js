@@ -1,12 +1,17 @@
-import { DatePicker, TimeInput } from "@mantine/dates";
-import { Button, Input, InputWrapper } from "@mantine/core";
+import { Button } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
+import { useNavigate } from "react-router-dom";
+import { Formik, Form } from "formik";
 import moment from "moment";
 import axios from "../../services/api";
+import InputField from "./FieldInput";
+import DatePickerField from "./FieldDatePicker";
+import TimeField from "./FieldTime";
 
-const FormComponent = ({ form = {}, setForm = () => {} }) => {
-  const onCreated = async () => {
-    const { time, date, name, birth_date } = form;
+const FormComponent = ({ form = {} }) => {
+  const navigate = useNavigate();
+  const onCreated = async (values) => {
+    const { time, date, name, birth_date } = values;
     let date_time = moment.utc(date);
     date_time.set({
       hour: time.getHours(),
@@ -23,14 +28,28 @@ const FormComponent = ({ form = {}, setForm = () => {} }) => {
     try {
       const response = await axios.post("/", scheduling);
 
-      let newData;
+      const schedulingData = {
+        date_time: response.data.result.schedulingId,
+        users: [
+          {
+            birth_date: response.data.result.birth_date,
+            name: response.data.result.name,
+          },
+        ],
+      };
 
-      const data = JSON.parse(window.localStorage.getItem("schedulings"));
+      let newData;
+      let data = JSON.parse(window.localStorage.getItem("schedulings"));
 
       if (data) {
-        newData = [...data, response];
+        if (data[data.length - 1].date_time === schedulingData.date_time) {
+          data[data.length - 1].users.push(schedulingData.users[0]);
+          newData = [...data];
+        } else {
+          newData = [...data, schedulingData];
+        }
       } else {
-        newData = [response];
+        newData = [schedulingData];
       }
 
       window.localStorage.setItem("schedulings", JSON.stringify(newData));
@@ -40,6 +59,9 @@ const FormComponent = ({ form = {}, setForm = () => {} }) => {
         title: "Success",
         message: `Scheduling Created Sucess`,
       });
+
+      window.localStorage.removeItem("form");
+      navigate("/");
     } catch (error) {
       if (error.response) {
         showNotification({
@@ -51,54 +73,31 @@ const FormComponent = ({ form = {}, setForm = () => {} }) => {
     }
   };
 
-  const onChange = (event) => {
-    setForm((prevState) => ({
-      ...prevState,
-      [event.target.name]: event.target.value,
-    }));
-  };
-
   return (
     <>
-      <DatePicker
-        label="Date Scheduling"
-        onChange={(value) => onChange({ target: { name: "date", value } })}
-        required
-        value={form.date}
-        minDate={new Date()}
+      <Formik
+        initialValues={form}
+        onSubmit={onCreated}
+        render={({ submitForm }) => (
+          <Form>
+            <DatePickerField name="date" label="Date Scheduling" />
+            <TimeField name="time" label="Time Scheduling" />
+
+            <InputField
+              name="name"
+              placeholder="Jonh Figueira"
+              label="Name"
+              description="Full Name"
+            />
+
+            <DatePickerField name="birth_date" label="Birth Date" />
+
+            <Button mt={10} className="mt-3" onClick={submitForm}>
+              Create
+            </Button>
+          </Form>
+        )}
       />
-
-      <TimeInput
-        value={form.time}
-        name="time"
-        onChange={(value) => onChange({ target: { name: "time", value } })}
-        required
-        label="Time Scheduling"
-      />
-
-      <InputWrapper id="name" required label="Name" description="User Fullname">
-        <Input
-          id="name"
-          name="name"
-          onChange={onChange}
-          placeholder="Lulinha Oliveira"
-          value={form.name}
-        />
-      </InputWrapper>
-
-      <DatePicker
-        label="Birth Date"
-        onChange={(value) =>
-          onChange({ target: { name: "birth_date", value } })
-        }
-        required
-        value={form.birth_date}
-        maxDate={new Date()}
-      />
-
-      <Button mt={10} className="mt-3" onClick={onCreated}>
-        Create
-      </Button>
     </>
   );
 };
