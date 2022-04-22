@@ -1,7 +1,17 @@
+import { MantineProvider } from "@mantine/core";
+import { NotificationsProvider } from "@mantine/notifications";
+
 import React from "react";
-import ReactDOM from "react-dom/client";
+import ReactDOM from "react-dom";
+
 import "./index.css";
 import Router from "./Router";
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<Router />);
+ReactDOM.render(
+  <MantineProvider>
+    <NotificationsProvider>
+      <Router />
+    </NotificationsProvider>
+  </MantineProvider>,
+  document.getElementById("root")
+);
