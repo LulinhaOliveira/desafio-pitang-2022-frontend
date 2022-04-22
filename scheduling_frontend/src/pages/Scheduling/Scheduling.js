@@ -3,6 +3,7 @@ import { Button, Container, Input, InputWrapper } from "@mantine/core";
 import { useState } from "react";
 import moment from "moment";
 import axios from "../../services/api";
+import { showNotification } from "@mantine/notifications";
 
 const Scheduling = () => {
   const [form, setForm] = useState({
@@ -19,7 +20,7 @@ const Scheduling = () => {
     }));
   };
 
-  const onCreated = () => {
+  const onCreated = async () => {
     const { time, date, name, birth_date } = form;
     let date_time = moment.utc(date);
     date_time.set({
@@ -34,7 +35,33 @@ const Scheduling = () => {
       date_time: date_time.toJSON(),
     };
 
-    axios.post("/", scheduling).catch((error) => console.error(error));
+    try {
+      const response = await axios.post("/", scheduling);
+
+      let newData;
+
+      const data = JSON.parse(window.localStorage.getItem("schedulings"));
+      if (data) {
+        newData = [...data, response];
+      } else {
+        newData = [response];
+      }
+      window.localStorage.setItem("schedulings", JSON.stringify(newData));
+
+      showNotification({
+        color: "green",
+        title: "Success",
+        message: `Scheduling Created Sucess`,
+      });
+    } catch (error) {
+      if (error.response) {
+        showNotification({
+          color: "red",
+          title: "Failed Create API",
+          message: error.response.data.Message,
+        });
+      }
+    }
   };
 
   return (
@@ -73,7 +100,7 @@ const Scheduling = () => {
         value={form.birth_date}
       />
 
-      <Button className="mt-3" onClick={onCreated}>
+      <Button mt={10} className="mt-3" onClick={onCreated}>
         Create
       </Button>
     </Container>
