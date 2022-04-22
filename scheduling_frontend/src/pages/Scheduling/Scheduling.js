@@ -15,9 +15,9 @@ const Scheduling = () => {
   } else {
     form = {
       name: "",
-      birth_date: "",
+      birth_date: new Date(),
       time: "",
-      date: "",
+      date: new Date(),
     };
   }
   return (
