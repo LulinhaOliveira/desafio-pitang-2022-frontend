@@ -83,7 +83,7 @@ const Schedulings = () => {
   };
   return (
     <Container>
-      <Table style={table} horizontalSpacing="xs" highlightOnHover>
+      <Table mb={20} style={table} horizontalSpacing="xs" highlightOnHover>
         <thead>
           <tr>
             <th>Date Time</th>

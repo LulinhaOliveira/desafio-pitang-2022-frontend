@@ -1472,6 +1472,13 @@
   resolved "https://registry.yarnpkg.com/@mantine/hooks/-/hooks-4.1.4.tgz#c293a84f66218606caabf28db13299b5dc504605"
   integrity sha512-1pcajF7gaSY0sUp9klqt7Y/gPIfTnHamkuefd8UctHMNBP25QdValAT1XGYfmHKIXeljZi7ow6O6dhsK9C8X2A==
 
+"@mantine/notifications@^4.1.4":
+  version "4.1.4"
+  resolved "https://registry.yarnpkg.com/@mantine/notifications/-/notifications-4.1.4.tgz#68a3c666edc8e9ee4c1ef4c8ecd2a92b0f133d79"
+  integrity sha512-IPq5/nXybf5AytJkOHfDB/nmPBoqgmwM8NVjawV/oQmdGwDX6sQ+4fBJuDUDuHOMvE1d4VTURV5a40NPK4D+ig==
+  dependencies:
+    react-transition-group "^4.4.2"
+
 "@mantine/styles@4.1.4":
   version "4.1.4"
   resolved "https://registry.yarnpkg.com/@mantine/styles/-/styles-4.1.4.tgz#0a35c29befacff101a955f8014c1e200f00b0684"

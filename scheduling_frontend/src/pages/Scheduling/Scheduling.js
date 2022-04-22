@@ -1,6 +1,7 @@
 import { DatePicker, TimeInput } from "@mantine/dates";
 import { Button, Container, Input, InputWrapper } from "@mantine/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { showNotification } from "@mantine/notifications";
 import moment from "moment";
 import axios from "../../services/api";
 import { showNotification } from "@mantine/notifications";
@@ -12,6 +13,23 @@ const Scheduling = () => {
     time: "",
     date: "",
   });
+
+  useEffect(() => {
+    const data = JSON.parse(window.localStorage.getItem("form"));
+    if (data) {
+      const aux = {
+        name: data.name,
+        birth_date: new Date(data.birth_date),
+        time: new Date(data.time),
+        date: new Date(data.date),
+      };
+      setForm(aux);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem("form", JSON.stringify(form));
+  }, [form]);
 
   const onChange = (event) => {
     setForm((prevState) => ({
@@ -71,6 +89,7 @@ const Scheduling = () => {
         onChange={(value) => onChange({ target: { name: "date", value } })}
         required
         value={form.date}
+        minDate={new Date()}
       />
 
       <TimeInput
@@ -98,6 +117,7 @@ const Scheduling = () => {
         }
         required
         value={form.birth_date}
+        maxDate={new Date()}
       />
 
       <Button mt={10} className="mt-3" onClick={onCreated}>
