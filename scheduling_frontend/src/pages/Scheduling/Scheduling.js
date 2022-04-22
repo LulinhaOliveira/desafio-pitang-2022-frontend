@@ -1,6 +1,7 @@
 import { DatePicker, TimeInput } from "@mantine/dates";
 import { Button, Container, Input, InputWrapper } from "@mantine/core";
 import { useEffect, useState } from "react";
+import { showNotification } from "@mantine/notifications";
 import moment from "moment";
 import axios from "../../services/api";
 
@@ -36,7 +37,7 @@ const Scheduling = () => {
     }));
   };
 
-  const onCreated = () => {
+  const onCreated = async () => {
     const { time, date, name, birth_date } = form;
     let date_time = moment.utc(date);
     date_time.set({
@@ -51,7 +52,33 @@ const Scheduling = () => {
       date_time: date_time.toJSON(),
     };
 
-    axios.post("/", scheduling).catch((error) => console.error(error));
+    try {
+      const response = await axios.post("/", scheduling);
+
+      let newData;
+
+      const data = JSON.parse(window.localStorage.getItem("schedulings"));
+      if (data) {
+        newData = [...data, response];
+      } else {
+        newData = [response];
+      }
+      window.localStorage.setItem("schedulings", JSON.stringify(newData));
+
+      showNotification({
+        color: "green",
+        title: "Success",
+        message: `Scheduling Created Sucess`,
+      });
+    } catch (error) {
+      if (error.response) {
+        showNotification({
+          color: "red",
+          title: "Failed",
+          message: error.response.data.Message,
+        });
+      }
+    }
   };
 
   return (
@@ -61,6 +88,7 @@ const Scheduling = () => {
         onChange={(value) => onChange({ target: { name: "date", value } })}
         required
         value={form.date}
+        minDate={new Date()}
       />
 
       <TimeInput
@@ -88,6 +116,7 @@ const Scheduling = () => {
         }
         required
         value={form.birth_date}
+        maxDate={new Date()}
       />
 
       <Button mt={"lg"} onClick={onCreated}>
