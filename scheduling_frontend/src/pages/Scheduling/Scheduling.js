@@ -1,5 +1,5 @@
 import { Container } from "@mantine/core";
-import FormComponent from "../../components/Form/Form_ik";
+import FormComponent from "../../components/Form";
 
 const Scheduling = () => {
   const data = JSON.parse(window.localStorage.getItem("form"));
@@ -15,9 +15,9 @@ const Scheduling = () => {
   } else {
     form = {
       name: "",
-      birth_date: "",
+      birth_date: new Date(),
       time: "",
-      date: "",
+      date: new Date(),
     };
   }
   return (
