@@ -1,7 +1,7 @@
 import { Table, Container, Button } from "@mantine/core";
-import "bootstrap/dist/css/bootstrap.min.css";
 import { useState, useEffect } from "react";
 import axios from "../../services/api";
+import moment from "moment";
 
 const Schedulings = () => {
   const [schedulings, setSchedulings] = useState([]);
@@ -34,22 +34,16 @@ const Schedulings = () => {
 
   const rows = schedulings.map((scheduling, index) => (
     <tr key={index}>
-      <td>{scheduling.date_time}</td>
+      <td>{moment.utc(scheduling.date_time).format("YYYY-MM-DD HH:mm")}</td>
       {scheduling.users.map((user, index) => (
         <td key={index}>
           Name : {user.name} <br />
-          Birth Date : {user.birth_date} <br />
+          Birth Date : {moment.utc(user.birth_date).format("YYYY-MM-DD")} <br />
           Status : {user.status} <br />
-          <Button
-            onClick={() => onUptaded(user.id, "attended")}
-            className="m-1"
-          >
+          <Button onClick={() => onUptaded(user.id, "attended")}>
             Attended
           </Button>
-          <Button
-            onClick={() => onUptaded(user.id, "not_attended")}
-            className="m-1"
-          >
+          <Button onClick={() => onUptaded(user.id, "not_attended")} ml={5}>
             Not Attended
           </Button>
         </td>
@@ -57,9 +51,12 @@ const Schedulings = () => {
     </tr>
   ));
 
+  const table = {
+    border: "2px solid",
+  };
   return (
     <Container>
-      <Table horizontalSpacing="xs" highlightOnHover className="border">
+      <Table style={table} horizontalSpacing="xs" highlightOnHover>
         <thead>
           <tr>
             <th>Date Time</th>
