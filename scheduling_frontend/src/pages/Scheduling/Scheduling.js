@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { showNotification } from "@mantine/notifications";
 import moment from "moment";
 import axios from "../../services/api";
+import { showNotification } from "@mantine/notifications";
 
 const Scheduling = () => {
   const [form, setForm] = useState({
@@ -74,7 +75,7 @@ const Scheduling = () => {
       if (error.response) {
         showNotification({
           color: "red",
-          title: "Failed",
+          title: "Failed Create API",
           message: error.response.data.Message,
         });
       }
@@ -119,7 +120,7 @@ const Scheduling = () => {
         maxDate={new Date()}
       />
 
-      <Button mt={"lg"} onClick={onCreated}>
+      <Button mt={10} className="mt-3" onClick={onCreated}>
         Create
       </Button>
     </Container>

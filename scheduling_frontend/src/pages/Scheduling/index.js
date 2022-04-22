@@ -2,34 +2,61 @@ import { Table, Container, Button } from "@mantine/core";
 import { useState, useEffect } from "react";
 import axios from "../../services/api";
 import moment from "moment";
+import { showNotification } from "@mantine/notifications";
 
 const Schedulings = () => {
   const [schedulings, setSchedulings] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("/")
-      .then((response) => setSchedulings(response.data))
-      .catch((error) => console.error(error));
+    (async () => {
+      try {
+        const response = await axios.get("/");
+        window.localStorage.setItem("schedulings", JSON.stringify(response));
+      } catch (error) {
+        if (error.response) {
+          showNotification({
+            color: "red",
+            title: "Failed Get API Schedulings",
+            message: error.response,
+          });
+        }
+      } finally {
+        const data = JSON.parse(window.localStorage.getItem("schedulings"));
+        setSchedulings(data.data);
+      }
+    })();
   }, []);
 
-  const onUptaded = (id, status) => {
-    axios
-      .patch(`/${id}`, { status: status })
-      .catch((error) => console.error(error));
+  const onUptaded = async (id, status) => {
+    try {
+      await axios.patch(`/${id}`, { status: status });
 
-    setSchedulings(
-      schedulings.filter((scheduling) => {
-        scheduling.users.filter((user) => {
-          if (user.id === id) {
-            user.status = status;
-          }
+      setSchedulings(
+        schedulings.filter((scheduling) => {
+          scheduling.users.filter((user) => {
+            if (user.id === id) {
+              user.status = status;
+            }
+            return user;
+          });
+          return scheduling;
+        })
+      );
 
-          return user;
-        });
-        return scheduling;
-      })
-    );
+      window.localStorage.setItem("schedulings", JSON.stringify(schedulings));
+
+      showNotification({
+        color: "green",
+        title: "Success",
+        message: `Status Updated Sucess`,
+      });
+    } catch (error) {
+      showNotification({
+        color: "red",
+        title: "Failed Uptade API",
+        message: error.response,
+      });
+    }
   };
 
   const rows = schedulings.map((scheduling, index) => (
