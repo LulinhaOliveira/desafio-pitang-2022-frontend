@@ -57,9 +57,12 @@ const Schedulings = () => {
     </tr>
   ));
 
+  const table = {
+    border: "2px solid",
+  };
   return (
     <Container>
-      <Table horizontalSpacing="xs" highlightOnHover className="border">
+      <Table mb={20} style={table} horizontalSpacing="xs" highlightOnHover>
         <thead>
           <tr>
             <th>Date Time</th>
