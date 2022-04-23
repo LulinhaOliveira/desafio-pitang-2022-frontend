@@ -1,37 +1,40 @@
 import React from "react";
 import { useField, useFormikContext } from "formik";
-import { Input, InputWrapper } from "@mantine/core";
+import { TimeInput } from "@mantine/dates";
+import "./form.css";
 
-const InputField = ({ name, id, ...restProps }) => {
+const TimeField = ({ ...restProps }) => {
   const { setFieldValue } = useFormikContext();
-  const [field] = useField({ name, ...restProps });
+  const [field, meta] = useField({ ...restProps });
   const form = {
     date: "",
     birth_date: "",
     name: "",
     time: "",
   };
-
   return (
-    <InputWrapper {...field} {...restProps}>
-      <Input
+    <>
+      <TimeInput
+        required
         {...field}
         {...restProps}
         onChange={(val) => {
-          setFieldValue(field.name, val);
           const data = JSON.parse(window.localStorage.getItem("form"));
-          field.value = field.value + val.nativeEvent.data;
           if (data) {
-            data[field.name] = field.value;
+            data[field.name] = val;
             window.localStorage.setItem("form", JSON.stringify(data));
           } else {
-            form[field.name] = field.value;
+            form[field.name] = val;
             window.localStorage.setItem("form", JSON.stringify(form));
           }
+          setFieldValue(field.name, val);
         }}
       />
-    </InputWrapper>
+      {meta.error && meta.touched && (
+        <span className="form_error">{meta.error}</span>
+      )}
+    </>
   );
 };
 
-export default InputField;
+export default TimeField;
