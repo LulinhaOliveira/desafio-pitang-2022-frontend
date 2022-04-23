@@ -4,9 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { Formik, Form } from "formik";
 import moment from "moment";
 import axios from "../../services/api";
-import InputField from "./FieldInput";
-import DatePickerField from "./FieldDatePicker";
-import TimeField from "./FieldTime";
+import InputField from "./Field/FieldInput";
+import DatePickerField from "./Field/FieldDatePicker";
+import TimeField from "./Field/FieldTime";
+import schema from "./schema.js";
 
 const FormComponent = ({ form = {} }) => {
   const navigate = useNavigate();
@@ -78,6 +79,7 @@ const FormComponent = ({ form = {} }) => {
       <Formik
         initialValues={form}
         onSubmit={onCreated}
+        validationSchema={schema}
         render={({ submitForm }) => (
           <Form>
             <DatePickerField name="date" label="Date Scheduling" />
