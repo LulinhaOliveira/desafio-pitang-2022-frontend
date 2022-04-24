@@ -15,7 +15,6 @@ const DatePickerField = ({ ...restProps }) => {
   return (
     <>
       <DatePicker
-        minDate={new Date()}
         required
         {...field}
         {...restProps}
