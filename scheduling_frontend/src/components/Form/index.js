@@ -82,7 +82,11 @@ const FormComponent = ({ form = {} }) => {
         validationSchema={schema}
         render={({ submitForm }) => (
           <Form>
-            <DatePickerField name="date" label="Date Scheduling" />
+            <DatePickerField
+              minDate={new Date()}
+              name="date"
+              label="Date Scheduling"
+            />
             <TimeField name="time" label="Time Scheduling" />
 
             <InputField
@@ -92,7 +96,11 @@ const FormComponent = ({ form = {} }) => {
               description="Full Name"
             />
 
-            <DatePickerField name="birth_date" label="Birth Date" />
+            <DatePickerField
+              maxDate={new Date()}
+              name="birth_date"
+              label="Birth Date"
+            />
 
             <Button mt={10} className="mt-3" onClick={submitForm}>
               Create
