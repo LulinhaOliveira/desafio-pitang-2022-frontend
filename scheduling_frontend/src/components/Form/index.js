@@ -102,7 +102,7 @@ const FormComponent = ({ form = {} }) => {
               label="Birth Date"
             />
 
-            <Button mt={10} className="mt-3" onClick={submitForm}>
+            <Button name="create" mt={10} className="mt-3" onClick={submitForm}>
               Create
             </Button>
           </Form>
