@@ -26,8 +26,8 @@ describe("Form", () => {
     cleanup();
   });
 
-  it("Render Form ", () => {
-    const { container, debug } = render(
+  it("Render Form", () => {
+    const { container } = render(
       <MemoryRouter>
         <Form form={initalValues} />
       </MemoryRouter>
@@ -44,8 +44,8 @@ describe("Form", () => {
     expect(button.textContent).toBe("Create");
   });
 
-  it("Render Form with Inital LocalStorage Values ", () => {
-    const { container, debug, queryByText } = render(
+  it("Render Form with Inital LocalStorage Values", () => {
+    const { container } = render(
       <MemoryRouter>
         <Form form={initalValuesStorage} />
       </MemoryRouter>

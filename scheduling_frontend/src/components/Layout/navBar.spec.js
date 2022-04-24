@@ -2,12 +2,12 @@
 /* eslint-disable testing-library/no-node-access */
 /* eslint-disable testing-library/no-container */
 import NavBar from "./navBar";
-import { cleanup, render } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 
 describe("NavBar", () => {
   it("Render NavBar", () => {
-    const { container, debug } = render(
+    const { container } = render(
       <MemoryRouter>
         <NavBar />
       </MemoryRouter>
